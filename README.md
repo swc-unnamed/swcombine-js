@@ -95,3 +95,4 @@ The SDK is currently a WIP. Status is as follows:
 | List entities by class and type            | :x:                | Public           |                                                                                                            |
 | Get type for existing entity               | :x:                | Public           |                                                                                                            |
 | List all entity types                      | :x:                | Public           |                                                                                                            |
+

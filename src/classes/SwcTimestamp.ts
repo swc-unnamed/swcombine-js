@@ -1,4 +1,4 @@
-import { InitiationMoment} from '@/interfaces'
+import { InitiationMoment } from '@/interfaces'
 import { TimestampUnitOptions } from '@/types'
 
 /**
@@ -12,32 +12,25 @@ import { TimestampUnitOptions } from '@/types'
  * @method getSecond
  */
 export class SwcTimestamp {
+  private static swcStart = new Date(1998, 11, 3, 7, 0, 0)
   protected year: number
   protected day: number
   protected hour: number
   protected minute: number
   protected second: number
 
-  private static swcStart = new Date(1998, 11, 3, 7, 0, 0)
-
   /**
    * Create a new SwcTimestamp object for a specific moment in Combine Galactic Time.
    * @param {InitiationMoment} source
    */
   constructor(source: InitiationMoment) {
-    const {
-      year,
-      day,
-      hour = 0,
-      minute = 0,
-      second = 0
-    } = source
+    const { year, day, hour, minute, second } = source
 
     this.year = year
     this.day = day
-    this.hour = hour
-    this.minute = minute
-    this.second = second
+    this.hour = hour || 0
+    this.minute = minute || 0
+    this.second = second || 0
   }
 
   /**
@@ -67,6 +60,41 @@ export class SwcTimestamp {
    */
   static now(): SwcTimestamp {
     return SwcTimestamp.fromDate(new Date())
+  }
+
+  /**
+   *
+   * @param {number} msSinceSwcStart
+   * @returns {SwcTimestamp}
+   * @private
+   */
+  private static calculateSwcTimestampFromMillisecondsSinceStart(msSinceSwcStart: number): SwcTimestamp {
+    const msPerYear = 365 * 24 * 60 * 60 * 1000
+    const msPerDay = 24 * 60 * 60 * 1000
+    const msPerHour = 60 * 60 * 1000
+    const msPerMinute = 60 * 1000
+
+    const year = Math.floor(msSinceSwcStart / msPerYear)
+    msSinceSwcStart -= year * msPerYear
+
+    const day = Math.floor(msSinceSwcStart / msPerDay)
+    msSinceSwcStart -= day * msPerDay
+
+    const hour = Math.floor(msSinceSwcStart / msPerHour)
+    msSinceSwcStart -= hour * msPerHour
+
+    const minute = Math.floor(msSinceSwcStart / msPerMinute)
+    msSinceSwcStart -= minute * msPerMinute
+
+    const seconds = Math.floor(msSinceSwcStart / 1000)
+
+    return new SwcTimestamp({
+      year,
+      day,
+      hour,
+      minute,
+      second: seconds,
+    })
   }
 
   /**
@@ -124,41 +152,6 @@ export class SwcTimestamp {
    */
   getSecond(): number {
     return this.second
-  }
-
-  /**
-   *
-   * @param {number} msSinceSwcStart
-   * @returns {SwcTimestamp}
-   * @private
-   */
-  private static calculateSwcTimestampFromMillisecondsSinceStart(msSinceSwcStart: number): SwcTimestamp {
-    const msPerYear = 365 * 24 * 60 * 60 * 1000
-    const msPerDay = 24 * 60 * 60 * 1000
-    const msPerHour = 60 * 60 * 1000
-    const msPerMinute = 60 * 1000
-
-    const year = Math.floor(msSinceSwcStart / msPerYear)
-    msSinceSwcStart -= year * msPerYear
-
-    const day = Math.floor(msSinceSwcStart / msPerDay)
-    msSinceSwcStart -= day * msPerDay
-
-    const hour = Math.floor(msSinceSwcStart / msPerHour)
-    msSinceSwcStart -= hour * msPerHour
-
-    const minute = Math.floor(msSinceSwcStart / msPerMinute)
-    msSinceSwcStart -= minute * msPerMinute
-
-    const seconds = Math.floor(msSinceSwcStart / 1000)
-
-    return new SwcTimestamp({
-      year,
-      day,
-      hour,
-      minute,
-      second: seconds
-    })
   }
 
   /**

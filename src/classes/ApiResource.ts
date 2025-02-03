@@ -1,5 +1,5 @@
 import { GetPermissionsResponse } from '@/types'
-import { GenericResource, Permission} from '@/classes'
+import { GenericResource, Permission } from '@/classes'
 
 /**
  *

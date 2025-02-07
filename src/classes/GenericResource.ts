@@ -14,16 +14,15 @@ export abstract class GenericResource {
       return await fetch(url, {
         headers: {
           Accept: 'application/json',
+        },
+      }).then((resp) => {
+        if (!resp.ok) {
+          console.log('responded:', resp.status)
+          throw new Error('Not a valid response')
+        } else {
+          return resp.json()
         }
       })
-        .then(resp => {
-          if (!resp.ok) {
-            console.log('responded:', resp.status)
-            throw new Error('Not a valid response')
-          } else {
-            return resp.json()
-          }
-        })
     } catch (err) {
       console.warn(err)
       throw err

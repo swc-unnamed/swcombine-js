@@ -2,11 +2,9 @@ import { defineConfig } from 'vite'
 
 import typescript from '@rollup/plugin-typescript'
 import { resolve } from 'path'
-import { copyFileSync } from 'fs'
 import { typescriptPaths } from 'rollup-plugin-typescript-paths'
 import tsconfigPaths from 'vite-tsconfig-paths'
 import dts from 'vite-plugin-dts'
-import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import { nodeExternals } from 'rollup-plugin-node-externals'
 
 export default defineConfig({
@@ -15,9 +13,6 @@ export default defineConfig({
     nodeExternals(),
     tsconfigPaths(),
     dts({
-      afterBuild: () => {
-        // copyFileSync('dist/index.d.ts', 'dist/index.d.mts')
-      },
       include: ['src'],
       rollupTypes: true,
       logLevel: 'error',
@@ -53,7 +48,7 @@ export default defineConfig({
           entryFileNames: 'index.esm.js',
           format: 'esm',
           name: 'swcombine.js',
-          plugins: [nodePolyfills({ include: [] })],
+          plugins: [],
         },
       ],
       external: [],

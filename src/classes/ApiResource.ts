@@ -1,8 +1,11 @@
-import Permission from '../types/Permission'
-import { GetPermissionsResponse } from '../responses/api/getPermissionsResponse'
-import { Resource } from './Resource'
+import { GetPermissionsResponse } from '@/types'
+import { GenericResource, Permission} from '@/classes'
 
-export default class ApiResource extends Resource {
+/**
+ *
+ * @method getPermissions
+ */
+export class ApiResource extends GenericResource {
   public constructor() {
     super('api')
   }

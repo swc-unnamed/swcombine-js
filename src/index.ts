@@ -1,5 +1,5 @@
-export * from '@/resources'
-export * from '@/responses'
+export * from '@/classes'
+export * from '@/interfaces'
 export * from '@/types'
 
 export * from '@/permissions'

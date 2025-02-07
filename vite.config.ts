@@ -16,7 +16,7 @@ export default defineConfig({
     tsconfigPaths(),
     dts({
       afterBuild: () => {
-        copyFileSync('dist/index.d.ts', 'dist/index.d.mts')
+        // copyFileSync('dist/index.d.ts', 'dist/index.d.mts')
       },
       include: ['src'],
       rollupTypes: true,

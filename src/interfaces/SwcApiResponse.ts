@@ -1,4 +1,4 @@
-export default interface SwcApiResponse<T> {
+export interface SwcApiResponse<T> {
   version: string
   timestamp: number
   resource: string

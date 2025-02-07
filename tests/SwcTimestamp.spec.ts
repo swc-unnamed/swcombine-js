@@ -1,4 +1,4 @@
-import SwcTimestamp from '../src/types/SwcTimestamp.js'
+import SwcTimestamp from '../src/classes/SwcTimestamp'
 import { describe, it, expect } from 'vitest'
 
 describe('SWCTimestampTests', () => {

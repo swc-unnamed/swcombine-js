@@ -1,4 +1,7 @@
-export default class Permission {
+/**
+ *
+ */
+export class Permission {
   public readonly name: string
 
   public readonly description: string

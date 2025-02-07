@@ -5,7 +5,6 @@ import { resolve } from 'path'
 import { typescriptPaths } from 'rollup-plugin-typescript-paths'
 import tsconfigPaths from 'vite-tsconfig-paths'
 import dts from 'vite-plugin-dts'
-import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import { nodeExternals } from 'rollup-plugin-node-externals'
 
 export default defineConfig({
@@ -49,7 +48,7 @@ export default defineConfig({
           entryFileNames: 'index.esm.js',
           format: 'esm',
           name: 'swcombine.js',
-          plugins: [nodePolyfills({ include: [] })],
+          plugins: [],
         },
       ],
       external: [],

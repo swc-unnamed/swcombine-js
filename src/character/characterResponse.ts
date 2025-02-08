@@ -518,19 +518,19 @@ function mapSwcLocation(location: CharacterResponseSwcCharacter['location']): Ch
       ? undefined
       : { uid: new SwcUid(location.city.attributes!.uid), name: location.city.value },
     coordinates: {
-      galaxy: { x: location.coordinates.galaxy.attributes.x, y: location.coordinates.galaxy.attributes.y },
-      system: parseCoords(location.coordinates.system.attributes.x, location.coordinates.system.attributes.y),
-      surface: parseCoords(location.coordinates.surface.attributes.x, location.coordinates.surface.attributes.y),
-      ground: parseCoords(location.coordinates.ground.attributes.x, location.coordinates.ground.attributes.y),
+      galaxy: parseCoords(location.coordinates.galaxy.attributes?.x, location.coordinates.galaxy.attributes?.y),
+      system: parseCoords(location.coordinates.system.attributes?.x, location.coordinates.system.attributes?.y),
+      surface: parseCoords(location.coordinates.surface.attributes?.x, location.coordinates.surface.attributes?.y),
+      ground: parseCoords(location.coordinates.ground.attributes?.x, location.coordinates.ground.attributes?.y),
     },
   }
 }
 
-function parseCoords(x: string | null, y: string | null): { x: number | null; y: number | null } {
-  if (x === null || y === null) return { x: null, y: null }
+function parseCoords(x?: string | number | null, y?: string | number | null): { x: number | null; y: number | null } {
+  if (x === null || x === undefined || y === null || y === undefined) return { x: null, y: null }
 
-  const intX = Number.parseInt(x, 10)
-  const intY = Number.parseInt(y, 10)
-  if (Number.isNaN(intX) || Number.isNaN(intY)) return { x: null, y: null }
+  const intX = typeof x === 'number' ? x : Number.parseInt(x, 10)
+  const intY = typeof y === 'number' ? y : Number.parseInt(y, 10)
+  if (!Number.isFinite(intX) || !Number.isFinite(intY)) return { x: null, y: null }
   return { x: intX, y: intY }
 }

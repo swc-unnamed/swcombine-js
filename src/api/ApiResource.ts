@@ -18,6 +18,10 @@ export class PublicApiResource extends GenericResource {
     const response = await this.get<GetPermissionsResponse>('permissions')
     const permissionDtos: Array<{ name: string; description: string; inherits: string[] }> = []
 
+    if ('error_code' in response.swcapi) {
+      throw new Error('Something went wrong while attempting to retrieve permissions from the webservices.')
+    }
+
     for (const apiPermission of response.swcapi.permissions.permission) {
       const { name, description, inherits } = apiPermission.attributes
       const inheritsArray = inherits.length == 0 ? [] : inherits.split(' ')

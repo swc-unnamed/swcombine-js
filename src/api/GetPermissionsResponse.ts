@@ -1,8 +1,4 @@
-import { SwcApiResponse } from '@/common'
-
-export type GetPermissionsResponse = SwcApiResponse<GetPermissionsResponsePermissions>
-
-export interface GetPermissionsResponsePermissions {
+export interface GetPermissionsResponse {
   permissions: {
     permission: GetPermissionsResponsePermission[]
   }

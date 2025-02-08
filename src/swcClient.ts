@@ -31,6 +31,6 @@ export class SwcClientWithOAuth extends SwcClient<true> {
     super()
 
     this.auth = new AuthService(config)
-    this.character = new AuthenticatedCharacterResource()
+    this.character = new AuthenticatedCharacterResource(this.auth)
   }
 }

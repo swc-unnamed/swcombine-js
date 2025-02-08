@@ -1,5 +1,3 @@
-export * from '@/classes'
-export * from '@/interfaces'
-export * from '@/types'
-
-export * from '@/permissions'
+export * from './swcClient'
+export * from './client/services/AuthService'
+export * from './timestamps'

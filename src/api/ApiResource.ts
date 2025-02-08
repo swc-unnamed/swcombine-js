@@ -1,15 +1,19 @@
-import { GetPermissionsResponse } from '@/types'
-import { GenericResource, Permission } from '@/classes'
+import { GenericResource } from '@/common'
+import { Permission } from './Permission'
+import { GetPermissionsResponse } from '@/api/GetPermissionsResponse'
 
 /**
  *
  * @method getPermissions
  */
-export class ApiResource extends GenericResource {
+export class PublicApiResource extends GenericResource {
   public constructor() {
     super('api')
   }
 
+  /**
+   * Get a list of all permissions in the SWC webservices.
+   */
   public async getPermissions(): Promise<Permission[]> {
     const response = await this.get<GetPermissionsResponse>('permissions')
     const permissionDtos: Array<{ name: string; description: string; inherits: string[] }> = []
@@ -27,7 +31,7 @@ export class ApiResource extends GenericResource {
     const permissions: Record<string, Permission> = {}
     for (const dto of permissionDtos) {
       const inheritedPermissions = dto.inherits.map((x) => permissions[x]!)
-      permissions[dto.name] = new Permission(dto.name, dto.description, inheritedPermissions)
+      permissions[dto.name] = { name: dto.name, description: dto.description, inheritedPermissions }
     }
 
     return Object.values(permissions)

@@ -1,6 +1,3 @@
-import { InitiationMoment } from '@/interfaces'
-import { TimestampUnitOptions } from '@/types'
-
 /**
  * Utility class for working with Star Wars Combine timestamps. Represents Combine  Galactic Time and can convert unix timestamps and Date objects to/from CGT.
  * @method toUnixTimestamp
@@ -21,16 +18,16 @@ export class SwcTimestamp {
 
   /**
    * Create a new SwcTimestamp object for a specific moment in Combine Galactic Time.
-   * @param {InitiationMoment} source
+   * @param {TimestampMoment} source
    */
-  constructor(source: InitiationMoment) {
-    const { year, day, hour, minute, second } = source
+  constructor(source: TimestampMoment) {
+    const { year, day, hour = 0, minute = 0, second = 0 } = source
 
     this.year = year
     this.day = day
-    this.hour = hour || 0
-    this.minute = minute || 0
-    this.second = second || 0
+    this.hour = hour
+    this.minute = minute
+    this.second = second
   }
 
   /**
@@ -99,10 +96,10 @@ export class SwcTimestamp {
 
   /**
    * Convert the SWC timestamp into a unix timestamp
-   * @param {TimestampUnitOptions} unit Whether the unix timestamp should be in seconds or milliseconds.
+   * @param {'sec' | 'ms' | 'seconds' | 'milliseconds'} unit Whether the unix timestamp should be in seconds or milliseconds.
    * @returns {number}
    */
-  toUnixTimestamp(unit: TimestampUnitOptions): number {
+  toUnixTimestamp(unit: 'sec' | 'ms' | 'seconds' | 'milliseconds'): number {
     const raw = this.calculateMillisecondsSinceStartFromSwcTimestamp() + SwcTimestamp.swcStart.getTime()
     if (unit === 'sec' || unit === 'seconds') {
       return raw / 1000
@@ -117,6 +114,10 @@ export class SwcTimestamp {
    */
   toDate(): Date {
     return new Date(this.calculateMillisecondsSinceStartFromSwcTimestamp() + SwcTimestamp.swcStart.getTime())
+  }
+
+  asMoment(): TimestampMoment {
+    return { year: this.year, day: this.day, hour: this.hour, minute: this.minute }
   }
 
   /**
@@ -155,6 +156,33 @@ export class SwcTimestamp {
   }
 
   /**
+   * Calculate a new timestamp by adding time to this timestamp, and return the newly calculated timestamp.
+   * @param duration
+   */
+  add(duration: Partial<Duration>): SwcTimestamp {
+    const unixTime = this.toUnixTimestamp('sec')
+    return SwcTimestamp.fromUnixTimestamp(unixTime + durationToSeconds(duration))
+  }
+
+  /**
+   * Calculate a new timestamp by subtracting time from this timestamp, and return the newly calculated timestamp.
+   * @param duration
+   */
+  subtract(duration: Partial<Duration>): SwcTimestamp {
+    const unixTime = this.toUnixTimestamp('sec')
+    return SwcTimestamp.fromUnixTimestamp(
+      Math.max(unixTime - durationToSeconds(duration), SwcTimestamp.swcStart.getTime() / 1000),
+    )
+  }
+
+  getDurationTo(otherTimestamp: SwcTimestamp): Duration {
+    const startTime = this.toUnixTimestamp('sec')
+    const endTime = otherTimestamp.toUnixTimestamp('sec')
+
+    return secondsToDuration(endTime - startTime)
+  }
+
+  /**
    * @returns {number}
    * @private
    */
@@ -174,4 +202,49 @@ export class SwcTimestamp {
 
     return msSinceSwcStart
   }
+}
+
+export interface TimestampMoment {
+  year: number
+  day: number
+  hour?: number
+  minute?: number
+  second?: number
+}
+
+export interface Duration {
+  years: number
+  days: number
+  hours: number
+  minutes: number
+  seconds: number
+}
+
+const durationToSeconds = (duration: Partial<Duration>) =>
+  (duration.years || 0) * 365 * 24 * 60 * 60 +
+  (duration.days || 0) * 24 * 60 * 60 +
+  (duration.hours || 0) * 60 * 60 +
+  (duration.minutes || 0) * 60 +
+  (duration.seconds || 0)
+
+const secondsToDuration = (seconds: number) => {
+  const secPerYear = 365 * 24 * 60 * 60
+  const secPerDay = 24 * 60 * 60
+  const secPerHour = 60 * 60
+  const secPerMinute = 60
+  let secondsToConvert = seconds
+
+  const years = Math.floor(seconds / secPerYear)
+  secondsToConvert -= years * secPerYear
+
+  const days = Math.floor(seconds / secPerDay)
+  secondsToConvert -= days * secPerDay
+
+  const hours = Math.floor(seconds / secPerHour)
+  secondsToConvert -= hours * secPerHour
+
+  const minutes = Math.floor(seconds / secPerMinute)
+  secondsToConvert -= minutes * secPerMinute
+
+  return { years, days, hours, minutes, seconds: secondsToConvert }
 }

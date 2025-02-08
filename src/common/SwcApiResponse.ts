@@ -5,3 +5,5 @@ export interface SwcApiResponse<T> {
   request: string
   swcapi: T
 }
+
+export type SwcApiError = SwcApiResponse<{ error_code: number; error_message: string }>

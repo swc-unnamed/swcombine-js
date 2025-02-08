@@ -1,4 +1,4 @@
-export default Object.freeze({
+export const permissions = Object.freeze({
   character: Object.freeze({
     auth: 'character_auth',
     read: 'character_read',

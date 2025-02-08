@@ -35,7 +35,7 @@ export class AuthenticatedCharacterResource extends PublicCharacterResource {
 
   async getCurrentCharacter(): Promise<CharacterResponse> {
     const accessToken = await this.auth.getAccessToken()
-    const response = await this.get<CharacterResponseSwc>('character', accessToken)
+    const response = await this.get<CharacterResponseSwc>('', accessToken)
     if ('error_code' in response.swcapi) {
       throw new Error(
         `Something went wrong while attempting to call the GET character endpoint: ${response.swcapi.error_message}`,

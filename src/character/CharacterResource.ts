@@ -42,6 +42,6 @@ export class AuthenticatedCharacterResource extends PublicCharacterResource {
       )
     }
 
-    return mapSwcResponseToCharacterResponse(response.swcapi)
+    return mapSwcResponseToCharacterResponse(response.swcapi.character)
   }
 }

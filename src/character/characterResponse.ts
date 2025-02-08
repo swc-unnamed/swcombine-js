@@ -1,6 +1,6 @@
 import { SwcUid } from '@/common/uid'
 import { SwcTimestamp } from '@/timestamps/SwcTimestamp'
-import { CharacterResponseSwc } from '@/character/characterResponseSwc'
+import { CharacterResponseSwcCharacter } from '@/character/characterResponseSwc'
 
 export interface CharacterResponse {
   /** Unique ID referring to this character */
@@ -270,7 +270,7 @@ interface CharacterLocation {
 
 type SkillLevel = 0 | 1 | 2 | 3 | 4 | 5
 
-export function mapSwcResponseToCharacterResponse(swc: CharacterResponseSwc): CharacterResponse {
+export function mapSwcResponseToCharacterResponse(swc: CharacterResponseSwcCharacter): CharacterResponse {
   return {
     uid: new SwcUid(swc.uid),
     name: swc.name,
@@ -299,7 +299,7 @@ export function mapSwcResponseToCharacterResponse(swc: CharacterResponseSwc): Ch
   }
 }
 
-function mapSwcFactions(factions: CharacterResponseSwc['factions']): CharacterResponse['factions'] {
+function mapSwcFactions(factions: CharacterResponseSwcCharacter['factions']): CharacterResponse['factions'] {
   if (factions === undefined || factions.length === 0) {
     return []
   }
@@ -311,7 +311,7 @@ function mapSwcFactions(factions: CharacterResponseSwc['factions']): CharacterRe
   }))
 }
 
-function mapSwcSkills(skills: CharacterResponseSwc['skills']): CharacterResponse['skills'] {
+function mapSwcSkills(skills: CharacterResponseSwcCharacter['skills']): CharacterResponse['skills'] {
   if (!skills.value) {
     return undefined
   }
@@ -352,7 +352,9 @@ function mapSwcSkills(skills: CharacterResponseSwc['skills']): CharacterResponse
   }
 }
 
-function mapSwcPrivileges(privileges: CharacterResponseSwc['privileges']): CharacterResponse['factionPrivileges'] {
+function mapSwcPrivileges(
+  privileges: CharacterResponseSwcCharacter['privileges'],
+): CharacterResponse['factionPrivileges'] {
   if (!privileges.value) {
     return undefined
   }
@@ -481,7 +483,7 @@ function mapSwcPrivileges(privileges: CharacterResponseSwc['privileges']): Chara
 }
 
 function findPrivilege(
-  privileges: Exclude<CharacterResponseSwc['privileges']['value'], undefined>,
+  privileges: Exclude<CharacterResponseSwcCharacter['privileges']['value'], undefined>,
   groupName: string,
   privilegeName: string,
 ): boolean {
@@ -492,7 +494,7 @@ function findPrivilege(
   return !!privilege && privilege.value === 'true'
 }
 
-function mapSwcLocation(location: CharacterResponseSwc['location']): CharacterResponse['location'] {
+function mapSwcLocation(location: CharacterResponseSwcCharacter['location']): CharacterResponse['location'] {
   if (!location) return undefined
 
   return {

@@ -184,15 +184,29 @@ export class SwcTimestamp {
 
   /**
    * Convert the SWC timestamp to a string (i.e. Year 25 Day 60, 12:45:21)
-   * @param format 'full' = Year 25, Day 60, 12:45:21, 'short' = 'Y26 D60, 12:45:21', 'day' = 'Y26 D60'.
+   * The following formats are available:
+   *
+   * 'full': Year 25 Day 60, 6:03:12<br>
+   * 'minute': Year 25 Day 60, 6:03<br>
+   * 'day': Year 25 Day 60<br>
+   * 'shortFull': Y25 D60, 6:03:12<br>
+   * 'shortMinute': Y25 D60, 6:03<br>
+   * 'shortDay': Y26 D60
+   * @param format format to use
    */
-  toString(format: 'full' | 'short' | 'day' = 'full') {
+  toString(format: 'full' | 'minute' | 'day' | 'shortFull' | 'shortMinute' | 'shortDay') {
     switch (format) {
       case 'full':
-        return `Year ${this.year} Day ${this.day}, ${this.hour}:${this.minute}:${this.second}`
-      case 'short':
-        return `Y${this.year} D${this.day}, ${this.hour}:${this.minute}:${this.second}`
+        return `Year ${this.year} Day ${this.day}, ${this.hour}:${this.minute.toString().padStart(2, '0')}:${this.second.toString().padStart(2, '0')}`
+      case 'minute':
+        return `Year ${this.year} Day ${this.day}, ${this.hour}:${this.minute.toString().padStart(2, '0')}`
       case 'day':
+        return `Year ${this.year} Day ${this.day}`
+      case 'shortFull':
+        return `Y${this.year} D${this.day}, ${this.hour}:${this.minute.toString().padStart(2, '0')}:${this.second.toString().padStart(2, '0')}`
+      case 'shortMinute':
+        return `Y${this.year} D${this.day}, ${this.hour}:${this.minute.toString().padStart(2, '0')}}`
+      case 'shortDay':
         return `Y${this.year} D${this.day}`
     }
   }

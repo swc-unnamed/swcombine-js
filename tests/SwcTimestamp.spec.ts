@@ -71,4 +71,41 @@ describe('SWCTimestampTests', () => {
     expect(result.getMinute()).to.equal(0)
     expect(result.getSecond()).to.equal(0)
   })
+
+  it('can be formatted to custom format strings', () => {
+    //arrange
+    const timestamp = new SwcTimestamp({ year: 25, day: 6, hour: 6, minute: 15, second: 41 })
+
+    //act
+    const result = timestamp.toString('{hms} on day {d} year {y}')
+    const result2 = timestamp.toString('{y}.{d}')
+    const result3 = timestamp.toString('{y}.{dd}')
+
+    //assert
+    expect(result).to.equal('06:15:41 on day 6 year 25')
+    expect(result2).to.equal('25.6')
+    expect(result3).to.equal('25.06')
+  })
+
+  it('strips unknown tags in custom format strings', () => {
+    //arrange
+    const timestamp = new SwcTimestamp({ year: 8, day: 8, hour: 7, minute: 23, second: 25 })
+
+    //act
+    const result = timestamp.toString('{z}.{d}.{y}.{dd}.{ddd}.{hmsz}.{hms}')
+
+    //assert
+    expect(result).to.equal('.8.8.08...07:23:25')
+  })
+
+  it('treats tags case-insensitively in custom format strings', () => {
+    //arrange
+    const timestamp = new SwcTimestamp({ year: 25, day: 6, hour: 6, minute: 23, second: 25 })
+
+    //act
+    const result = timestamp.toString('Y{Y} D{d}, {hh}:{MM}:{sS}')
+
+    //assert
+    expect(result).to.equal('Y25 D6, 06:23:25')
+  })
 })

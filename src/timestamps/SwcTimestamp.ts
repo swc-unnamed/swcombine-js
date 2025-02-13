@@ -183,18 +183,29 @@ export class SwcTimestamp {
   }
 
   /**
-   * Convert the SWC timestamp to a string (i.e. Year 25 Day 60, 12:45:21)
-   * The following formats are available:
+   * Convert the SWC timestamp to a string (i.e. Year 25 Day 60, 12:45:21).
+   * You can either pass in a preset name, or a custom format string.
+   * The following preset formats are available:
    *
    * 'full': Year 25 Day 60, 6:03:12<br>
    * 'minute': Year 25 Day 60, 6:03<br>
    * 'day': Year 25 Day 60<br>
    * 'shortFull': Y25 D60, 6:03:12<br>
    * 'shortMinute': Y25 D60, 6:03<br>
-   * 'shortDay': Y26 D60
-   * @param format format to use
+   * 'shortDay': Y26 D60<br>
+   * <br>
+   * If passing in a custom formatting string, you can use substitution tags to fill in variables. These tags are wrapped in {} and are case-insensitive. The following substitution tags are available:<br>
+   * {y}: year<br>
+   * {d}: day<br>
+   * {h}: hour<br>
+   * {m}: minute<br>
+   * {s}: second<br>
+   * double the tag to get leading zeroes. i.e. {h} = 8, {hh} = 08.<br>
+   * {hms} is a shorthand for {hh}:{mm}:{ss}.<br>
+   * Example: '{hms} on Day {d} of Year {y}' becomes '08:12:14 on Day 6 of Year 25'.
+   * @param format format to use, or custom formatting string.
    */
-  toString(format: 'full' | 'minute' | 'day' | 'shortFull' | 'shortMinute' | 'shortDay' = 'full') {
+  toString(format: 'full' | 'minute' | 'day' | 'shortFull' | 'shortMinute' | 'shortDay' | string = 'full') {
     switch (format) {
       case 'full':
         return `Year ${this.year} Day ${this.day}, ${this.hour}:${this.minute.toString().padStart(2, '0')}:${this.second.toString().padStart(2, '0')}`
@@ -209,6 +220,67 @@ export class SwcTimestamp {
       case 'shortDay':
         return `Y${this.year} D${this.day}`
     }
+
+    let formattedString = ''
+    let currentTag = ''
+    let isInTag = false
+    format.split('').forEach((char) => {
+      if (char === '{' && !isInTag) {
+        isInTag = true
+        return
+      }
+      if (char === '}' && isInTag) {
+        formattedString += this.substituteTag(currentTag)
+        isInTag = false
+        currentTag = ''
+        return
+      }
+
+      if (isInTag) {
+        currentTag += char
+      } else {
+        formattedString += char
+      }
+    })
+
+    return formattedString
+  }
+
+  private substituteTag(tag: string): string {
+    if (tag.localeCompare('y', 'en', { sensitivity: 'accent' }) === 0) {
+      return this.year.toString()
+    }
+    if (tag.localeCompare('yy', 'en', { sensitivity: 'accent' }) === 0) {
+      return this.year.toString().padStart(2, '0')
+    }
+    if (tag.localeCompare('d', 'en', { sensitivity: 'accent' }) === 0) {
+      return this.day.toString()
+    }
+    if (tag.localeCompare('dd', 'en', { sensitivity: 'accent' }) === 0) {
+      return this.day.toString().padStart(2, '0')
+    }
+    if (tag.localeCompare('h', 'en', { sensitivity: 'accent' }) === 0) {
+      return this.hour.toString()
+    }
+    if (tag.localeCompare('hh', 'en', { sensitivity: 'accent' }) === 0) {
+      return this.hour.toString().padStart(2, '0')
+    }
+    if (tag.localeCompare('m', 'en', { sensitivity: 'accent' }) === 0) {
+      return this.minute.toString()
+    }
+    if (tag.localeCompare('mm', 'en', { sensitivity: 'accent' }) === 0) {
+      return this.minute.toString().padStart(2, '0')
+    }
+    if (tag.localeCompare('s', 'en', { sensitivity: 'accent' }) === 0) {
+      return this.second.toString()
+    }
+    if (tag.localeCompare('ss', 'en', { sensitivity: 'accent' }) === 0) {
+      return this.second.toString().padStart(2, '0')
+    }
+    if (tag.localeCompare('hms', 'en', { sensitivity: 'accent' }) === 0) {
+      return `${this.hour.toString().padStart(2, '0')}:${this.minute.toString().padStart(2, '0')}:${this.second.toString().padStart(2, '0')}`
+    }
+    return ''
   }
 
   /**

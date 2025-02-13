@@ -97,4 +97,15 @@ describe('SWCTimestampTests', () => {
     //assert
     expect(result).to.equal('.8.8.08...07:23:25')
   })
+
+  it('treats tags case-insensitively in custom format strings', () => {
+    //arrange
+    const timestamp = new SwcTimestamp({ year: 25, day: 6, hour: 6, minute: 23, second: 25 })
+
+    //act
+    const result = timestamp.toString('Y{Y} D{d}, {hh}:{MM}:{sS}')
+
+    //assert
+    expect(result).to.equal('Y25 D6, 06:23:25')
+  })
 })

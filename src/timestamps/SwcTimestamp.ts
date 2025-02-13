@@ -194,7 +194,7 @@ export class SwcTimestamp {
    * 'shortDay': Y26 D60
    * @param format format to use
    */
-  toString(format: 'full' | 'minute' | 'day' | 'shortFull' | 'shortMinute' | 'shortDay') {
+  toString(format: 'full' | 'minute' | 'day' | 'shortFull' | 'shortMinute' | 'shortDay' = 'full') {
     switch (format) {
       case 'full':
         return `Year ${this.year} Day ${this.day}, ${this.hour}:${this.minute.toString().padStart(2, '0')}:${this.second.toString().padStart(2, '0')}`

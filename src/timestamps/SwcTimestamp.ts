@@ -9,7 +9,7 @@
  * @method getSecond
  */
 export class SwcTimestamp {
-  private static swcStart = new Date(1998, 11, 3, 7, 0, 0)
+  private static swcStart = new Date(Date.UTC(1998, 11, 3, 7, 0, 0))
   protected year: number
   protected day: number
   protected hour: number
@@ -87,7 +87,7 @@ export class SwcTimestamp {
 
     return new SwcTimestamp({
       year,
-      day,
+      day: day + 1,
       hour,
       minute,
       second: seconds,
@@ -183,6 +183,21 @@ export class SwcTimestamp {
   }
 
   /**
+   * Convert the SWC timestamp to a string (i.e. Year 25 Day 60, 12:45:21)
+   * @param format 'full' = Year 25, Day 60, 12:45:21, 'short' = 'Y26 D60, 12:45:21', 'day' = 'Y26 D60'.
+   */
+  toString(format: 'full' | 'short' | 'day' = 'full') {
+    switch (format) {
+      case 'full':
+        return `Year ${this.year} Day ${this.day}, ${this.hour}:${this.minute}:${this.second}`
+      case 'short':
+        return `Y${this.year} D${this.day}, ${this.hour}:${this.minute}:${this.second}`
+      case 'day':
+        return `Y${this.year} D${this.day}`
+    }
+  }
+
+  /**
    * @returns {number}
    * @private
    */
@@ -196,7 +211,7 @@ export class SwcTimestamp {
 
     msSinceSwcStart += this.year * msPerYear
     msSinceSwcStart += (this.day - 1) * msPerDay
-    msSinceSwcStart += (this.hour + 1) * msPerHour
+    msSinceSwcStart += this.hour * msPerHour
     msSinceSwcStart += this.minute * msPerMinute
     msSinceSwcStart += this.second * 1000
 

@@ -2,6 +2,7 @@
 
 >[!note]
 >This is an unoffical SDK built and distributed by a cohort of developers who also enjoy the Combine.
+
 Typescript and Javascript SDK for the Star Wars Combine 2.0 Web Services.
 The SDK is currently a WIP. Status is as follows:
 

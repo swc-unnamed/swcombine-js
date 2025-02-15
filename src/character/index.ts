@@ -1,6 +1,7 @@
 export type { CharacterResponse } from './characterResponse'
 export type { HandleCheckResult } from './handleCheckResponse'
 export type { MessageResponse } from './messageResponse'
+export type * from './privileges'
 export type { CharacterPrivileges } from './privilegesResponse'
 export type { SendMessageResult } from './sendMessageResponse'
 export type { CharacterSkills } from './skillsResponse'

@@ -203,6 +203,8 @@ export class AuthenticatedCharacterResource extends PublicCharacterResource {
 
   /**
    * Get the specified (or current) character's privileges.
+   * Requires the **character_privileges** OAuth scope.
+   * @throws Error
    * @param characterUidOrName {SwcUid | string | undefined} name or UID of character. If not specified, will get the privileges for the current (authenticated) character.
    * @param factionId {number | undefined} Optional, the id of the faction you want to view the privileges for. Defaults to the token owner's own current primary faction
    */
@@ -227,6 +229,8 @@ export class AuthenticatedCharacterResource extends PublicCharacterResource {
 
   /**
    * Check if the specified (or current) character has the specified privilege.
+   * Requires the **character_privileges** OAuth scope.
+   * @throws Error
    * @param privilege The privilege to check
    * @param characterUidOrName name or UID of the character. If not specified, checks the privilege against the current (authenticated) character.
    * @param factionId Optional, the id of the faction you want to check the privilege for. Defaults to the token owner's own current primary faction
@@ -256,6 +260,8 @@ export class AuthenticatedCharacterResource extends PublicCharacterResource {
 
   /**
    * Grant the specified character the specified privilege
+   * Requires the **character_privileges** OAuth scope.
+   * @throws Error
    * @param privilege the privilege to grant
    * @param characterUidOrName name or UID of the character
    * @param factionId Optional, the id of the faction you want to grant the privilege for. Defaults to the token owner's own current primary faction
@@ -279,6 +285,8 @@ export class AuthenticatedCharacterResource extends PublicCharacterResource {
 
   /**
    * Revoke the specified privilege from the specified character
+   * Requires the **character_privileges** OAuth scope.
+   * @throws Error
    * @param privilege the privilege to revoke
    * @param characterUidOrName name or UID of the character
    * @param factionId Optional, the id of the faction you want to revoke the privilege for. Defaults to the token owner's own current primary faction

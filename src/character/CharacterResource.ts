@@ -225,6 +225,12 @@ export class AuthenticatedCharacterResource extends PublicCharacterResource {
     return mapPrivilegesResponse(response.swcapi.privileges)
   }
 
+  /**
+   * Check if the specified (or current) character has the specified privilege.
+   * @param privilege The privilege to check
+   * @param characterUidOrName name or UID of the character. If not specified, checks the privilege against the current (authenticated) character.
+   * @param factionId Optional, the id of the faction you want to check the privilege for. Defaults to the token owner's own current primary faction
+   */
   async checkPrivilege(
     privilege: PrivilegeDescriptor,
     characterUidOrName?: SwcUid | string,
@@ -248,17 +254,18 @@ export class AuthenticatedCharacterResource extends PublicCharacterResource {
     return response.swcapi.privilege.value === 'true'
   }
 
+  /**
+   * Grant the specified character the specified privilege
+   * @param privilege the privilege to grant
+   * @param characterUidOrName name or UID of the character
+   * @param factionId Optional, the id of the faction you want to grant the privilege for. Defaults to the token owner's own current primary faction
+   */
   async grantPrivilege(
     privilege: PrivilegeDescriptor,
-    characterUidOrName?: SwcUid | string,
+    characterUidOrName: SwcUid | string,
     factionId?: SwcUid,
   ): Promise<void> {
-    const uid =
-      characterUidOrName === undefined
-        ? this.auth.getUserId()
-        : characterUidOrName instanceof SwcUid
-          ? characterUidOrName.uid
-          : characterUidOrName
+    const uid = characterUidOrName instanceof SwcUid ? characterUidOrName.uid : characterUidOrName
 
     const response = await this.post<void>(
       `${uid}/privileges/${privilege.group}/${privilege.privilege}${factionId ? `?faction_id=${factionId}` : ''}`,
@@ -270,17 +277,18 @@ export class AuthenticatedCharacterResource extends PublicCharacterResource {
     }
   }
 
+  /**
+   * Revoke the specified privilege from the specified character
+   * @param privilege the privilege to revoke
+   * @param characterUidOrName name or UID of the character
+   * @param factionId Optional, the id of the faction you want to revoke the privilege for. Defaults to the token owner's own current primary faction
+   */
   async revokePrivilege(
     privilege: PrivilegeDescriptor,
-    characterUidOrName?: SwcUid | string,
+    characterUidOrName: SwcUid | string,
     factionId?: SwcUid,
   ): Promise<void> {
-    const uid =
-      characterUidOrName === undefined
-        ? this.auth.getUserId()
-        : characterUidOrName instanceof SwcUid
-          ? characterUidOrName.uid
-          : characterUidOrName
+    const uid = characterUidOrName instanceof SwcUid ? characterUidOrName.uid : characterUidOrName
 
     const response = await this.post<void>(
       `${uid}/privileges/${privilege.group}/${privilege.privilege}${factionId ? `?faction_id=${factionId}` : ''}`,

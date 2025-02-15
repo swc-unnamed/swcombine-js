@@ -3,11 +3,11 @@ export interface SkillsResponseSwc {
 }
 
 export interface SwcSkills {
-  general: SwcSkillGroup<'strength' | 'dexterity' | 'speed' | 'dodge' | 'projectile' | 'nonProjectile'>[]
-  space: SwcSkillGroup<'fighterPiloting' | 'fighterCombat' | 'capitalPiloting' | 'capitalCombat' | 'spaceCommand'>[]
-  ground: SwcSkillGroup<'vehiclePiloting' | 'vehicleCombat' | 'infantryCommand' | 'vehicleCommand' | 'heavyWeapons'>[]
-  social: SwcSkillGroup<'medical' | 'diplomacy' | 'crafting' | 'management' | 'perception' | 'stealth'>[]
-  science: SwcSkillGroup<'rndHull' | 'rndElectronics' | 'rndEngines' | 'rndWeapons' | 'repair' | 'compOps'>[]
+  general: [SwcSkillGroup<'strength' | 'dexterity' | 'speed' | 'dodge' | 'projectile' | 'nonProjectile'>]
+  space: [SwcSkillGroup<'fighterPiloting' | 'fighterCombat' | 'capitalPiloting' | 'capitalCombat' | 'spaceCommand'>]
+  ground: [SwcSkillGroup<'vehiclePiloting' | 'vehicleCombat' | 'infantryCommand' | 'vehicleCommand' | 'heavyWeapons'>]
+  social: [SwcSkillGroup<'medical' | 'diplomacy' | 'crafting' | 'management' | 'perception' | 'stealth'>]
+  science: [SwcSkillGroup<'rndHull' | 'rndElectronics' | 'rndEngines' | 'rndWeapons' | 'repair' | 'compOps'>]
 }
 
 interface SwcSkillGroup<T> {
@@ -17,7 +17,7 @@ interface SwcSkillGroup<T> {
 
 interface SwcSkill<T> {
   attributes: { type: T }
-  value: 0 | 1 | 2 | 3 | 4 | 5
+  value: SkillLevel
 }
 
 type SkillLevel = 0 | 1 | 2 | 3 | 4 | 5

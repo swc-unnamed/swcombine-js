@@ -8,37 +8,36 @@ The SDK is currently a WIP. Status is as follows:
 - :x: = Not yet implemented
 - :construction: = Partially implemented
 - :heavy_check_mark: = Implemented
-- :white_check_mark: = Implemented and covered by tests
 
 | Endpoint                                   | Status             | Availability     | OAuth scope required (if applicable)                                                                       |
 |--------------------------------------------|--------------------|------------------|------------------------------------------------------------------------------------------------------------|
-| **<h3>OAuth</h3>**                         | :x:                | Public           |                                                                                                            |
-| Get token using server flow (node.js only) | :x:                | Public           |                                                                                                            |
+| **<h3>OAuth</h3>**                         | :construction:     | Public           |                                                                                                            |
+| Get token using server flow (node.js only) | :heavy_check_mark: | Public           |                                                                                                            |
 | Get token using client flow (browser only) | :x:                | Public           |                                                                                                            |
 | Get granted permissions                    | :x:                | OAuth :lock:     |                                                                                                            |
-| **<h3>Permissions</h3>**                   | :x:                |                  |                                                                                                            |
+| **<h3>Permissions</h3>**                   | :heavy_check_mark: |                  |                                                                                                            |
 | List permissions                           | :heavy_check_mark: | Public           |                                                                                                            |
 | **<h3>Rate Limits</h3>**                   | :x:                |                  |                                                                                                            |
 | List rate limits                           | :x:                | Public           |                                                                                                            |
-| **<h3>Time</h3>**                          | :white_check_mark: |                  |                                                                                                            |
-| Get current SWC time                       | :white_check_mark: | Public/on device |                                                                                                            |
-| Convert between SWC and Unix time          | :white_check_mark: | Public/on device |                                                                                                            |
-| Convert between SWC time and Date objects  | :white_check_mark: | Public/on device |                                                                                                            |
-| **<h3>Character</h3>**                     | :x:                |                  |                                                                                                            |
-| Get character info                         | :x:                | OAuth :lock:     | character_read                                                                                             |
-| Get character's credits                    | :x:                | OAuth :lock:     | character_credits                                                                                          |
+| **<h3>Time</h3>**                          | :heavy_check_mark: |                  |                                                                                                            |
+| Get current SWC time                       | :heavy_check_mark: | Public/on device |                                                                                                            |
+| Convert between SWC and Unix time          | :heavy_check_mark: | Public/on device |                                                                                                            |
+| Convert between SWC time and Date objects  | :heavy_check_mark: | Public/on device |                                                                                                            |
+| **<h3>Character</h3>**                     | :construction:     |                  |                                                                                                            |
+| Get character info                         | :heavy_check_mark: | OAuth :lock:     | character_read                                                                                             |
+| Get character's credits                    | :heavy_check_mark: | OAuth :lock:     | character_credits                                                                                          |
+| Transfer credits                           | :heavy_check_mark: | OAuth :lock:     | character_credits_write                                                                                    |
 | Get character's creditlog                  | :x:                | OAuth :lock:     | character_credits                                                                                          |
-| Get UID by handle(handlecheck)             | :x:                | Public           |                                                                                                            |
-| List received messages                     | :x:                | OAuth :lock:     | messages_read                                                                                              |
-| List sent messages                         | :x:                | OAuth :lock:     | messages_read                                                                                              |
-| Send message from character                | :x:                | OAuth :lock:     | messages_send                                                                                              |
-| Get message by id                          | :x:                | OAUth :lock:     | messages_read                                                                                              |
-| Delete message by id                       | :x:                | OAuth :lock:     | messages_delete                                                                                            |
-| Get character's skills                     | :x:                | OAuth :lock:     | character_skills                                                                                           |
-| List character's privileges                | :x:                | OAuth :lock:     | character_privileges                                                                                       |
-| Check if character has privilege           | :x:                | OAuth :lock:     | character_privileges, and must be logged in as someone that can view the privileges of others.             |
-| Grant privilege to a character             | :x:                | OAuth :lock:     | character_privileges, and must be logged in as someone that has the ability to grant privileges to others. |
-| Revoke privilege from character            | :x:                | OAuth :lock:     | character_privileges, and must be logged in as someone that can grant/revoke privileges of others.         |
+| Get UID by handle(handlecheck)             | :heavy_check_mark: | Public           |                                                                                                            |
+| List sent/received messages                | :x:                | OAuth :lock:     | messages_read                                                                                              |
+| Send message from character                | :heavy_check_mark: | OAuth :lock:     | messages_send                                                                                              |
+| Get message by id                          | :heavy_check_mark: | OAUth :lock:     | messages_read                                                                                              |
+| Delete message by id                       | :heavy_check_mark: | OAuth :lock:     | messages_delete                                                                                            |
+| Get character's skills                     | :heavy_check_mark: | OAuth :lock:     | character_skills                                                                                           |
+| List character's privileges                | :heavy_check_mark: | OAuth :lock:     | character_privileges                                                                                       |
+| Check if character has privilege           | :heavy_check_mark: | OAuth :lock:     | character_privileges, and must be logged in as someone that can view the privileges of others.             |
+| Grant privilege to a character             | :heavy_check_mark: | OAuth :lock:     | character_privileges, and must be logged in as someone that has the ability to grant privileges to others. |
+| Revoke privilege from character            | :heavy_check_mark: | OAuth :lock:     | character_privileges, and must be logged in as someone that can grant/revoke privileges of others.         |
 | **<h3>Datacard</h3>**                      | :x:                |                  |                                                                                                            |
 | List datacards                             | :x:                | OAuth :lock:     | faction_datacards_read                                                                                     |
 | Get datacard                               | :x:                | OAuth :lock:     | faction_datacards_read                                                                                     |

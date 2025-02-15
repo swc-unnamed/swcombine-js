@@ -67,8 +67,9 @@ export abstract class GenericResource {
         headers: {
           Accept: 'application/json',
           ...(accessTokenToUse ? { Authorization: `OAuth ${accessTokenToUse}` } : {}),
+          ...(body ? { 'Content-Type': 'application/x-www-form-urlencoded' } : {}),
         },
-        ...(method === 'POST' && !!body ? { body: this.buildFormData(body) } : {}),
+        ...(body ? { body: new URLSearchParams(body as Record<string, string>) } : {}),
       }).then((resp) => {
         if (resp.status >= 500) {
           console.log('responded:', resp.status)
@@ -83,13 +84,5 @@ export abstract class GenericResource {
       console.warn(err)
       throw err
     }
-  }
-
-  private buildFormData(body: object): FormData {
-    const formData = new FormData()
-    Object.entries(body).forEach(([key, value]) => {
-      formData.append(key, value)
-    })
-    return formData
   }
 }

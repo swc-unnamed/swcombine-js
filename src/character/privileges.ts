@@ -70,7 +70,7 @@ export enum TagsPrivilege {
   Delete = 'delete_tags',
 }
 
-export enum CombatPrivilege {
+export enum CombatReportsPrivilege {
   ViewCombatReports = 'view_combat_reports',
   LaunchGarrisonSquad = 'launch_garrison_squad',
   ModifyGarrisonReserve = 'modify_garrison_reserve',
@@ -131,7 +131,7 @@ export enum FacilityPrivilege {
   ReviewBuildRequests = 'permissions',
 }
 
-export enum CityPrivilege {
+export enum CitiesPrivilege {
   View = 'view',
   Assign = 'assign',
   Rename = 'rename',
@@ -174,7 +174,7 @@ export enum MaterialsPrivilege {
   Makeover = 'makeover',
 }
 
-export enum PlanetPrivilege {
+export enum PlanetsPrivilege {
   View = 'view',
   Assign = 'assign',
 }
@@ -188,56 +188,158 @@ export enum DatacardPrivilege {
   View = 'view',
 }
 
-export type Privilege =
-  | MembersPrivilege
-  | FinancePrivilege
-  | PrivilegesPrivilege
-  | ArrestExecutePrivilege
-  | GnsPrivilege
-  | TagsPrivilege
-  | NpcManagementPrivilege
-  | ProductionPrivilege
-  | NpcTransportPrivilege
-  | SecondInCommandPrivilege
-  | ShipPrivilege
-  | VehiclePrivilege
-  | StationPrivilege
-  | FacilityPrivilege
-  | CityPrivilege
-  | ItemPrivilege
-  | NpcPrivilege
-  | DroidPrivilege
-  | CreaturePrivilege
-  | MaterialsPrivilege
-  | PlanetPrivilege
-  | StockPrivilege
-  | DatacardPrivilege
-  | CombatPrivilege
-  | FactionManagementPrivilege
+export const Privilege = {
+  ...MembersPrivilege,
+  ...FinancePrivilege,
+  ...PrivilegesPrivilege,
+  ...ArrestExecutePrivilege,
+  ...GnsPrivilege,
+  ...TagsPrivilege,
+  ...NpcManagementPrivilege,
+  ...ProductionPrivilege,
+  ...NpcTransportPrivilege,
+  ...SecondInCommandPrivilege,
+  ...CombatReportsPrivilege,
+  ...FactionManagementPrivilege,
+  View: 'view',
+  Assign: 'assign',
+  Rename: 'rename',
+  Makeover: 'makeover',
+  ReviewBuildRequests: 'permissions',
+  view: 'View',
+  assign: 'Assign',
+  rename: 'Rename',
+  makeover: 'Makeover',
+  permissions: 'ReviewBuildRequests',
+} as const
+export type Privilege = (typeof Privilege)[keyof typeof Privilege]
+
+export enum PrivilegeGroup {
+  Members = 'members',
+  Finance = 'finance',
+  Privileges = 'privileges',
+  ArrestExecute = 'arrest_execute',
+  Gns = 'gns',
+  Tags = 'tags',
+  NpcManagement = 'npc_management',
+  Production = 'production',
+  NpcTransport = 'npc_transport',
+  SecondInCommand = 'second_in_command',
+  Ship = 'ship',
+  Vehicle = 'vehicle',
+  Station = 'station',
+  Facility = 'facility',
+  Cities = 'cities',
+  Item = 'item',
+  Npc = 'npc',
+  Droid = 'droid',
+  Creature = 'creature',
+  Materials = 'materials',
+  Planets = 'planets',
+  Stock = 'stock',
+  Datacard = 'datacard',
+  CombatReports = 'combat_reports',
+  FactionManagement = 'faction_management',
+}
 
 export type PrivilegeDescriptor =
-  | { group: 'members'; privilege: MembersPrivilege }
-  | { group: 'finance'; privilege: FinancePrivilege }
-  | { group: 'privileges'; privilege: PrivilegesPrivilege }
-  | { group: 'arrest_execute'; privilege: ArrestExecutePrivilege }
-  | { group: 'gns'; privilege: GnsPrivilege }
-  | { group: 'tags'; privilege: TagsPrivilege }
-  | { group: 'npc_management'; privilege: NpcManagementPrivilege }
-  | { group: 'production'; privilege: ProductionPrivilege }
-  | { group: 'npc_transport'; privilege: NpcTransportPrivilege }
-  | { group: 'second_in_command'; privilege: SecondInCommandPrivilege }
-  | { group: 'ship'; privilege: ShipPrivilege }
-  | { group: 'vehicle'; privilege: VehiclePrivilege }
-  | { group: 'station'; privilege: StationPrivilege }
-  | { group: 'facility'; privilege: FacilityPrivilege }
-  | { group: 'cities'; privilege: CityPrivilege }
-  | { group: 'item'; privilege: ItemPrivilege }
-  | { group: 'npc'; privilege: NpcPrivilege }
-  | { group: 'droid'; privilege: DroidPrivilege }
-  | { group: 'creature'; privilege: CreaturePrivilege }
-  | { group: 'materials'; privilege: MaterialsPrivilege }
-  | { group: 'planets'; privilege: PlanetPrivilege }
-  | { group: 'stock'; privilege: StockPrivilege }
-  | { group: 'datacard'; privilege: DatacardPrivilege }
-  | { group: 'combat_reports'; privilege: CombatPrivilege }
-  | { group: 'faction_management'; privilege: FactionManagementPrivilege }
+  | {
+      group: PrivilegeGroup.Members | `${PrivilegeGroup.Members}`
+      privilege: MembersPrivilege | `${MembersPrivilege}`
+    }
+  | {
+      group: PrivilegeGroup.Finance | `${PrivilegeGroup.Finance}`
+      privilege: FinancePrivilege | `${FinancePrivilege}`
+    }
+  | {
+      group: PrivilegeGroup.Privileges | `${PrivilegeGroup.Privileges}`
+      privilege: PrivilegesPrivilege | `${PrivilegesPrivilege}`
+    }
+  | {
+      group: PrivilegeGroup.ArrestExecute | `${PrivilegeGroup.ArrestExecute}`
+      privilege: ArrestExecutePrivilege | `${ArrestExecutePrivilege}`
+    }
+  | {
+      group: PrivilegeGroup.Gns | `${PrivilegeGroup.Gns}`
+      privilege: GnsPrivilege | `${GnsPrivilege}`
+    }
+  | {
+      group: PrivilegeGroup.Tags | `${PrivilegeGroup.Tags}`
+      privilege: TagsPrivilege | `${TagsPrivilege}`
+    }
+  | {
+      group: PrivilegeGroup.NpcManagement | `${PrivilegeGroup.NpcManagement}`
+      privilege: NpcManagementPrivilege | `${NpcManagementPrivilege}`
+    }
+  | {
+      group: PrivilegeGroup.Production | `${PrivilegeGroup.Production}`
+      privilege: ProductionPrivilege | `${ProductionPrivilege}`
+    }
+  | {
+      group: PrivilegeGroup.NpcTransport | `${PrivilegeGroup.NpcTransport}`
+      privilege: NpcTransportPrivilege | `${NpcTransportPrivilege}`
+    }
+  | {
+      group: PrivilegeGroup.SecondInCommand | `${PrivilegeGroup.SecondInCommand}`
+      privilege: SecondInCommandPrivilege | `${SecondInCommandPrivilege}`
+    }
+  | {
+      group: PrivilegeGroup.Ship | `${PrivilegeGroup.Ship}`
+      privilege: ShipPrivilege | `${ShipPrivilege}`
+    }
+  | {
+      group: PrivilegeGroup.Vehicle | `${PrivilegeGroup.Vehicle}`
+      privilege: VehiclePrivilege | `${VehiclePrivilege}`
+    }
+  | {
+      group: PrivilegeGroup.Station | `${PrivilegeGroup.Station}`
+      privilege: StationPrivilege | `${StationPrivilege}`
+    }
+  | {
+      group: PrivilegeGroup.Facility | `${PrivilegeGroup.Facility}`
+      privilege: FacilityPrivilege | `${FacilityPrivilege}`
+    }
+  | {
+      group: PrivilegeGroup.Cities | `${PrivilegeGroup.Cities}`
+      privilege: CitiesPrivilege | `${CitiesPrivilege}`
+    }
+  | {
+      group: PrivilegeGroup.Item | `${PrivilegeGroup.Item}`
+      privilege: ItemPrivilege | `${ItemPrivilege}`
+    }
+  | {
+      group: PrivilegeGroup.Npc | `${PrivilegeGroup.Npc}`
+      privilege: NpcPrivilege | `${NpcPrivilege}`
+    }
+  | {
+      group: PrivilegeGroup.Droid | `${PrivilegeGroup.Droid}`
+      privilege: DroidPrivilege | `${DroidPrivilege}`
+    }
+  | {
+      group: PrivilegeGroup.Creature | `${PrivilegeGroup.Creature}`
+      privilege: CreaturePrivilege | `${CreaturePrivilege}`
+    }
+  | {
+      group: PrivilegeGroup.Materials | `${PrivilegeGroup.Materials}`
+      privilege: MaterialsPrivilege | `${MaterialsPrivilege}`
+    }
+  | {
+      group: PrivilegeGroup.Planets | `${PrivilegeGroup.Planets}`
+      privilege: PlanetsPrivilege | `${PlanetsPrivilege}`
+    }
+  | {
+      group: PrivilegeGroup.Stock | `${PrivilegeGroup.Stock}`
+      privilege: StockPrivilege | `${StockPrivilege}`
+    }
+  | {
+      group: PrivilegeGroup.Datacard | `${PrivilegeGroup.Datacard}`
+      privilege: DatacardPrivilege | `${DatacardPrivilege}`
+    }
+  | {
+      group: PrivilegeGroup.CombatReports | `${PrivilegeGroup.CombatReports}`
+      privilege: CombatReportsPrivilege | `${CombatReportsPrivilege}`
+    }
+  | {
+      group: PrivilegeGroup.FactionManagement | `${PrivilegeGroup.FactionManagement}`
+      privilege: FactionManagementPrivilege | `${FactionManagementPrivilege}`
+    }

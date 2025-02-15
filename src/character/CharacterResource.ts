@@ -115,7 +115,7 @@ export class AuthenticatedCharacterResource extends PublicCharacterResource {
   async sendMessage(recipients: string | string[], communication: string): Promise<SendMessageResult> {
     const recipientChunks = ArrayUtils.splitIntoChunks(Array.isArray(recipients) ? recipients : [recipients], 25)
     const result: SendMessageResult = {
-      messagesAttempted: recipients.length,
+      messagesAttempted: recipientChunks.map((chunk) => chunk.length).reduce((a, b) => a + b),
       totalSuccessfullySent: 0,
       successfullySentTo: [],
       failedToSendTo: [],
@@ -131,7 +131,7 @@ export class AuthenticatedCharacterResource extends PublicCharacterResource {
         await this.auth.getAccessToken(),
       )
       if ('error_code' in response.swcapi) {
-        this.onApiError('GET message', response.swcapi.error_message)
+        this.onApiError('SEND message', response.swcapi.error_message)
       }
 
       if (!isSuccess(response.swcapi)) {

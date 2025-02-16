@@ -27,27 +27,32 @@ export class SwcUid {
   get uid(): string {
     return `${this._entityType}:${this._id}`
   }
+
+  toString(): string {
+    return this.uid
+  }
 }
 
 export enum SwcUidType {
-  character = 1,
-  ship = 2,
-  vehicle = 3,
-  facility = 4,
-  station = 5,
-  city = 7,
-  planet = 8,
-  system = 9,
-  npc = 10,
-  creature = 11,
-  item = 12,
-  droid = 13,
-  datacard = 14,
-  material = 16,
-  stock = 17,
-  weapon = 18,
-  faction = 20,
-  race = 22,
-  sector = 25,
-  customImage = 37,
+  Character = 1,
+  Ship = 2,
+  Vehicle = 3,
+  Facility = 4,
+  Station = 5,
+  City = 7,
+  Planet = 8,
+  System = 9,
+  Npc = 10,
+  Creature = 11,
+  Item = 12,
+  Droid = 13,
+  Datacard = 14,
+  Material = 16,
+  Stock = 17,
+  Weapon = 18,
+  Faction = 20,
+  Race = 22,
+  Sector = 25,
+  CustomImage = 37,
+  Message = 38,
 }

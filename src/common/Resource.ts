@@ -1,10 +1,10 @@
-// Utility type: If OAuth is enabled, return the authenticated version, otherwise return the public version
 import { SwcApiError, SwcApiResponse } from '@/common/SwcApiResponse'
 
+// Utility type: If OAuth is enabled, return the authenticated version, otherwise return the public version
 export type Resource<TOAuth extends boolean, Public, Authenticated> = TOAuth extends true ? Authenticated : Public
 
 export abstract class GenericResource {
-  private resourceName: string
+  private readonly resourceName: string
 
   protected constructor(resourceName: string) {
     this.resourceName = resourceName

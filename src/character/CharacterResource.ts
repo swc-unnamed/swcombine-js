@@ -1,5 +1,4 @@
-import { ArrayUtils, GenericResource } from '@/common'
-import { SwcUid } from '@/common/uid'
+import { ArrayUtils, GenericResource, SwcUid, PaginatedResult } from '@/common'
 import { AuthService } from '@/client/services/AuthService'
 import { HandleCheckResponse, HandleCheckResult } from './handleCheckResponse'
 import { CharacterResponse, mapSwcResponseToCharacterResponse } from './characterResponse'
@@ -15,7 +14,14 @@ import {
   isSuccess,
   SendMessageResponseSwcSuccess,
 } from './sendMessageResponse'
-import { MessageResponse, MessageResponseSwc, mapResponse as mapMessageResponse } from './messageResponse'
+import {
+  MessageEntry,
+  MessageEntrySwc,
+  MessageResponse,
+  MessageResponseSwc,
+  mapEntry as mapMessageEntry,
+  mapResponse as mapMessageResponse,
+} from './messageResponse'
 import { SkillsResponseSwc, CharacterSkills, mapResponse as mapSkillsResponse } from './skillsResponse'
 import {
   PrivilegesResponseSwc,
@@ -24,6 +30,7 @@ import {
   PrivilegeResponseSwc,
 } from './privilegesResponse'
 import { PrivilegeDescriptor } from './privileges'
+import { CreditLog, CreditLogSwc, mapResponse as mapCreditLog } from '@/character/creditlogResponse'
 
 export type CharacterResource<TOAuth extends boolean> = TOAuth extends true
   ? AuthenticatedCharacterResource
@@ -34,6 +41,10 @@ export class PublicCharacterResource extends GenericResource {
     super('character')
   }
 
+  /**
+   * Attempt to get a character's uid by their handle. Can also be used to check if a character with the given handle exists.
+   * @param handle handle to check.
+   */
   async handleCheck(handle: string): Promise<HandleCheckResult | undefined> {
     const response = await this.get<HandleCheckResponse>(`handlecheck/${handle}`)
     if ('error_code' in response.swcapi) {
@@ -106,7 +117,38 @@ export class AuthenticatedCharacterResource extends PublicCharacterResource {
   }
 
   /**
-   * Send a message from a character.
+   * Get the character's banking log.
+   * Requires the **character_credits** OAuth scope.
+   */
+  getCreditLog(): PaginatedResult<CreditLog, CreditLogSwc> {
+    return new PaginatedResult(
+      'character',
+      `${this.auth.getUserId()}/creditlog`,
+      {},
+      1000,
+      (item) => mapCreditLog(this.auth.getUserId(), item),
+      this.auth,
+    )
+  }
+
+  /**
+   * Get a list of all messages sent or received by the character. <br>
+   * Requires the **messages_read** OAuth scope.
+   * @param mode Whether to list messages sent by the character, received by the character, or both. When not specified, both are included. From the perspective of the current (authenticated) character.
+   */
+  listMessages(mode: 'sent' | 'received' | 'both' = 'both'): PaginatedResult<MessageEntry, MessageEntrySwc> {
+    return new PaginatedResult(
+      'character',
+      `${this.auth.getUserId()}/messages/${mode === 'both' ? '' : mode}`,
+      {},
+      50,
+      mapMessageEntry,
+      this.auth,
+    )
+  }
+
+  /**
+   * Send a message from the character.
    * Requires the **messages_send** OAuth scope.
    * @throws Error
    * @param recipients The recipient or recipients of the message. **note**: If sending a message in bulk, a separate API request will be sent for every 25 recipients.

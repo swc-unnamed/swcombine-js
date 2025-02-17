@@ -90,11 +90,7 @@ export class PaginatedResult<T, TSwc> extends GenericResource {
       throw new Error(`${pageNumber} is not a valid page number. Must be 1 or higher.`)
     }
 
-    if (this.totalItems === -1) {
-      await this.fetchPageIfNotLoaded(pageNumber)
-    }
-
-    if (pageNumber <= this.totalPages && !this.fetchedPages.includes(pageNumber)) {
+    if (this.totalItems === -1 || pageNumber <= this.totalPages) {
       await this.fetchPageIfNotLoaded(pageNumber)
     }
 
@@ -169,7 +165,7 @@ export class PaginatedResult<T, TSwc> extends GenericResource {
 
   private getEndIndex(page: number): number {
     const calculatedEndIndex = this.effectivePageSize * page
-    return this.totalItems ? Math.min(calculatedEndIndex, this.totalItems) : calculatedEndIndex
+    return this.totalItems !== -1 ? Math.min(calculatedEndIndex, this.totalItems) : calculatedEndIndex
   }
 
   private async getPageNumberForIndex(index: number): Promise<number> {

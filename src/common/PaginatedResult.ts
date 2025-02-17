@@ -173,7 +173,7 @@ export class PaginatedResult<T, TSwc> extends GenericResource {
       const bestGuessPageNumber = Math.floor(index / this.itemCount) + 1
       await this.fetchPageIfNotLoaded(bestGuessPageNumber)
     }
-    return this.pageSize === 0 ? 1 : Math.floor(index / this.pageSize!) + 1
+    return this.pageSize === 0 ? 1 : Math.floor(index / this.pageSize) + 1
   }
 
   private get effectivePageSize() {

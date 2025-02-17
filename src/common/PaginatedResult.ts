@@ -18,7 +18,7 @@ export class PaginatedResult<T, TSwc> extends GenericResource {
   private readonly params: Record<string, string | number | boolean>
   private readonly itemCount: number
   private readonly mapFunc: (item: TSwc) => T
-  private auth?: AuthService
+  private readonly auth?: AuthService
 
   private fetchedPages: number[] = []
   private fetchedItems: T[] = []

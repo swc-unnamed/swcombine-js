@@ -119,9 +119,8 @@ export class AuthenticatedCharacterResource extends PublicCharacterResource {
   /**
    * Get the character's banking log.
    * Requires the **character_credits** OAuth scope.
-   * @throws Error
    */
-  async getCreditLog(): Promise<PaginatedResult<CreditLog, CreditLogSwc>> {
+  getCreditLog(): PaginatedResult<CreditLog, CreditLogSwc> {
     return new PaginatedResult(
       'character',
       `${this.auth.getUserId()}/creditlog`,
@@ -137,9 +136,7 @@ export class AuthenticatedCharacterResource extends PublicCharacterResource {
    * Requires the **messages_read** OAuth scope.
    * @param mode Whether to list messages sent by the character, received by the character, or both. When not specified, both are included. From the perspective of the current (authenticated) character.
    */
-  async listMessages(
-    mode: 'sent' | 'received' | 'both' = 'both',
-  ): Promise<PaginatedResult<MessageEntry, MessageEntrySwc>> {
+  listMessages(mode: 'sent' | 'received' | 'both' = 'both'): PaginatedResult<MessageEntry, MessageEntrySwc> {
     return new PaginatedResult(
       'character',
       `${this.auth.getUserId()}/messages/${mode === 'both' ? '' : mode}`,

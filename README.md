@@ -23,13 +23,13 @@ The SDK is currently a WIP. Status is as follows:
 | Get current SWC time                       | :white_check_mark: | Public/on device |                                                                                                            |
 | Convert between SWC and Unix time          | :white_check_mark: | Public/on device |                                                                                                            |
 | Convert between SWC time and Date objects  | :white_check_mark: | Public/on device |                                                                                                            |
-| **<h3>Character</h3>**                     | :construction:     |                  |                                                                                                            |
+| **<h3>Character</h3>**                     | :white_check_mark: |                  |                                                                                                            |
 | Get character info                         | :white_check_mark: | OAuth :lock:     | character_read                                                                                             |
 | Get character's credits                    | :white_check_mark: | OAuth :lock:     | character_credits                                                                                          |
 | Transfer credits                           | :white_check_mark: | OAuth :lock:     | character_credits_write                                                                                    |
-| Get character's creditlog                  | :x:                | OAuth :lock:     | character_credits                                                                                          |
+| Get character's creditlog                  | :white_check_mark: | OAuth :lock:     | character_credits                                                                                          |
 | Get UID by handle(handlecheck)             | :white_check_mark: | Public           |                                                                                                            |
-| List sent/received messages                | :x:                | OAuth :lock:     | messages_read                                                                                              |
+| List sent/received messages                | :white_check_mark: | OAuth :lock:     | messages_read                                                                                              |
 | Send message from character                | :white_check_mark: | OAuth :lock:     | messages_send                                                                                              |
 | Get message by id                          | :white_check_mark: | OAUth :lock:     | messages_read                                                                                              |
 | Delete message by id                       | :white_check_mark: | OAuth :lock:     | messages_delete                                                                                            |

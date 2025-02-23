@@ -25,7 +25,17 @@ export class PaginatedResult<T, TSwc> extends GenericResource {
   private totalItems: number = -1
   private pageSize: number = -1
   private get totalPages(): number {
-    return this.totalItems === -1 ? -1 : Math.ceil(this.totalItems / this.pageSize)
+    switch (this.totalItems) {
+      case -1:
+        return -1
+      case 0:
+        return 0
+      default:
+        return Math.ceil(this.totalItems / this.pageSize)
+    }
+  }
+  private get isInitialised(): boolean {
+    return this.totalItems !== -1
   }
 
   constructor(
@@ -50,7 +60,7 @@ export class PaginatedResult<T, TSwc> extends GenericResource {
    * @throws Error
    */
   public async getTotalCount(): Promise<number> {
-    if (this.totalItems === -1) {
+    if (!this.isInitialised) {
       await this.fetchPageIfNotLoaded(1)
     }
     return this.totalItems
@@ -62,7 +72,7 @@ export class PaginatedResult<T, TSwc> extends GenericResource {
    * @throws Error
    */
   public async getTotalPages(): Promise<number> {
-    if (this.totalItems === -1) {
+    if (!this.isInitialised) {
       await this.fetchPageIfNotLoaded(1)
     }
     return this.totalPages
@@ -74,7 +84,7 @@ export class PaginatedResult<T, TSwc> extends GenericResource {
    * @throws Error
    */
   public async getPageSize(): Promise<number> {
-    if (this.pageSize === -1) {
+    if (!this.isInitialised) {
       await this.fetchPageIfNotLoaded(1)
     }
     return this.pageSize
@@ -83,6 +93,7 @@ export class PaginatedResult<T, TSwc> extends GenericResource {
   /**
    * Get a page worth of items.
    * @param pageNumber page to retrieve, 1 or higher. If the page number is higher than the total number of pages, an empty array is returned.
+   * if a page number higher than the total number of pages is requested, an empty array is returned.
    * @throws Error
    */
   public async getPage(pageNumber: number): Promise<T[]> {
@@ -90,9 +101,11 @@ export class PaginatedResult<T, TSwc> extends GenericResource {
       throw new Error(`${pageNumber} is not a valid page number. Must be 1 or higher.`)
     }
 
-    if (this.totalItems === -1 || pageNumber <= this.totalPages) {
-      await this.fetchPageIfNotLoaded(pageNumber)
+    if (this.isInitialised && pageNumber > this.totalPages) {
+      return []
     }
+
+    await this.fetchPageIfNotLoaded(pageNumber)
 
     return this.fetchedItems.slice(this.getStartIndex(pageNumber), this.getEndIndex(pageNumber))
   }
@@ -112,7 +125,7 @@ export class PaginatedResult<T, TSwc> extends GenericResource {
     if (endIndex < startIndex) return []
 
     const requiredPages = await this.getRequiredPagesForRange(startIndex, endIndex)
-    requiredPages.forEach((page) => this.fetchPageIfNotLoaded(page))
+    await Promise.all(requiredPages.map((page) => this.fetchPageIfNotLoaded(page)))
 
     return this.fetchedItems.slice(startIndex, endIndex + 1)
   }
@@ -160,24 +173,26 @@ export class PaginatedResult<T, TSwc> extends GenericResource {
   }
 
   private getStartIndex(page: number): number {
-    return page === 1 ? 1 : this.effectivePageSize * (page - 1) + 1
+    return this.effectivePageSize * (page - 1)
   }
 
   private getEndIndex(page: number): number {
     const calculatedEndIndex = this.effectivePageSize * page
-    return this.totalItems !== -1 ? Math.min(calculatedEndIndex, this.totalItems) : calculatedEndIndex
+    return this.isInitialised ? Math.min(calculatedEndIndex, this.totalItems) : calculatedEndIndex
   }
 
   private async getPageNumberForIndex(index: number): Promise<number> {
-    if (this.pageSize === -1) {
+    if (!this.isInitialised) {
       const bestGuessPageNumber = Math.floor(index / this.itemCount) + 1
       await this.fetchPageIfNotLoaded(bestGuessPageNumber)
     }
-    return this.pageSize === 0 ? 1 : Math.floor(index / this.pageSize) + 1
+
+    // cannot divide by 0, so if result set is empty, just return page 1
+    return this.totalItems === 0 ? 1 : Math.floor(index / this.pageSize) + 1
   }
 
   private get effectivePageSize() {
-    return this.pageSize === -1 ? this.itemCount : this.pageSize
+    return this.isInitialised ? this.pageSize : this.itemCount
   }
 
   private async getRequiredPagesForRange(startIndex: number, endIndex: number): Promise<number[]> {
@@ -196,7 +211,7 @@ export class PaginatedResult<T, TSwc> extends GenericResource {
       throw new Error('Cannot fetch negative page number.')
     }
     if (this.fetchedPages.includes(page)) return
-    if (this.totalPages !== -1 && page > this.totalPages) return
+    if (this.isInitialised && page > this.totalPages) return
 
     const params = {
       ...this.params,
@@ -212,7 +227,7 @@ export class PaginatedResult<T, TSwc> extends GenericResource {
     const swcApiKey = Object.keys(response.swcapi)[0]
     const result = response.swcapi[swcApiKey]
 
-    if (this.totalItems === -1) {
+    if (!this.isInitialised) {
       this.totalItems = result.attributes.total
       this.pageSize = result.attributes.count || 0
     }

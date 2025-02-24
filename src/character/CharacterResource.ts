@@ -1,4 +1,4 @@
-import { ArrayUtils, GenericResource, SwcUid, PaginatedResult, mapFunc } from '@/common'
+import { ArrayUtils, GenericResource, SwcUid, PaginatedResult } from '@/common'
 import { AuthService } from '@/client/services/AuthService'
 import { HandleCheckResponse, HandleCheckResult } from './handleCheckResponse'
 import { CharacterResponse, mapSwcResponseToCharacterResponse } from './characterResponse'

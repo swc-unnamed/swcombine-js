@@ -121,14 +121,12 @@ export class AuthenticatedCharacterResource extends PublicCharacterResource {
    * Requires the **character_credits** OAuth scope.
    */
   getCreditLog(): PaginatedResult<CreditLog, CreditLogSwc> {
-    return new PaginatedResult(
-      'character',
-      `${this.auth.getUserId()}/creditlog`,
-      {},
-      1000,
-      (item) => mapCreditLog(this.auth.getUserId(), item),
-      this.auth,
-    )
+    const options = {
+      itemCount: 1000,
+      mapFunc: (item: CreditLogSwc) => mapCreditLog(this.auth.getUserId(), item),
+      auth: this.auth,
+    }
+    return this.paginateGet(`${this.auth.getUserId()}/creditlog`, options)
   }
 
   /**
@@ -137,14 +135,12 @@ export class AuthenticatedCharacterResource extends PublicCharacterResource {
    * @param mode Whether to list messages sent by the character, received by the character, or both. When not specified, both are included. From the perspective of the current (authenticated) character.
    */
   listMessages(mode: 'sent' | 'received' | 'both' = 'both'): PaginatedResult<MessageEntry, MessageEntrySwc> {
-    return new PaginatedResult(
-      'character',
-      `${this.auth.getUserId()}/messages/${mode === 'both' ? '' : mode}`,
-      {},
-      50,
-      mapMessageEntry,
-      this.auth,
-    )
+    const options = {
+      itemCount: 50,
+      mapFunc: mapMessageEntry,
+      auth: this.auth,
+    }
+    return this.paginateGet(`${this.auth.getUserId()}/messages/${mode === 'both' ? '' : mode}`, options)
   }
 
   /**

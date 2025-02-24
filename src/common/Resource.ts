@@ -1,10 +1,22 @@
 import { SwcApiError, SwcApiResponse } from '@/common/SwcApiResponse'
+import { PaginatedResult } from '@/common/PaginatedResult'
+import { AuthService } from '@/client/services/AuthService'
 
 // Utility type: If OAuth is enabled, return the authenticated version, otherwise return the public version
 export type Resource<TOAuth extends boolean, Public, Authenticated> = TOAuth extends true ? Authenticated : Public
+export interface PaginateOptions {
+  itemCount: number
+  params?: Record<string, string | number | boolean>
+  mapFunc?: mapFunc
+  auth?: AuthService
+}
 
-export abstract class GenericResource {
-  private readonly resourceName: string
+export interface mapFunc {
+  (item: any): any
+}
+
+export abstract class BaseHttpResource {
+  protected readonly resourceName: string
 
   protected constructor(resourceName: string) {
     this.resourceName = resourceName
@@ -85,4 +97,21 @@ export abstract class GenericResource {
       throw err
     }
   }
+}
+
+export abstract class GenericResource extends BaseHttpResource {
+  constructor(resourceName: string) {
+    super(resourceName)
+  }
+
+  paginateGet<T, TSwc>(endpointUrl: string, options: PaginateOptions) {
+    const {
+      itemCount,
+      params = {},
+      mapFunc = (item: any) => item,
+      auth
+    } = options
+    return new PaginatedResult<T, TSwc>(this.resourceName, endpointUrl, params, itemCount, mapFunc, auth)
+  }
+
 }

@@ -1,4 +1,4 @@
-import { GenericResource } from '@/common/Resource'
+import { BaseHttpResource } from '@/common/Resource'
 import { AuthService } from '@/client/services/AuthService'
 
 type PaginatedResultSwc<T> = {
@@ -13,7 +13,7 @@ type PaginatedResponseSwc<T> = Record<string, PaginatedResultSwc<T>>
 /**
  * A wrapper around paginated API results. Offers function to work with these pages.
  */
-export class PaginatedResult<T, TSwc> extends GenericResource {
+export class PaginatedResult<T, TSwc> extends BaseHttpResource {
   private readonly endpointUrl: string
   private readonly params: Record<string, string | number | boolean>
   private readonly itemCount: number

@@ -122,7 +122,6 @@ export class AuthenticatedCharacterResource extends PublicCharacterResource {
    */
   getCreditLog(): PaginatedResult<CreditLog, CreditLogSwc> {
     const options = {
-      params: {},
       itemCount: 1000,
       mapFunc: (item: CreditLogSwc) => mapCreditLog(this.auth.getUserId(), item),
       auth: this.auth,
@@ -137,7 +136,6 @@ export class AuthenticatedCharacterResource extends PublicCharacterResource {
    */
   listMessages(mode: 'sent' | 'received' | 'both' = 'both'): PaginatedResult<MessageEntry, MessageEntrySwc> {
     const options = {
-      params: {},
       itemCount: 50,
       mapFunc: mapMessageEntry,
       auth: this.auth,

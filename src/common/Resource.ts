@@ -5,8 +5,8 @@ import { AuthService } from '@/client/services/AuthService'
 // Utility type: If OAuth is enabled, return the authenticated version, otherwise return the public version
 export type Resource<TOAuth extends boolean, Public, Authenticated> = TOAuth extends true ? Authenticated : Public
 export interface PaginateOptions {
+  itemCount: number
   params?: Record<string, string | number | boolean>
-  itemCount?: number
   mapFunc?: mapFunc
   auth?: AuthService
 }
@@ -104,10 +104,10 @@ export abstract class GenericResource extends BaseHttpResource {
     super(resourceName)
   }
 
-  paginateGet<T, TSwc>(endpointUrl: string, options: PaginateOptions = {}) {
+  paginateGet<T, TSwc>(endpointUrl: string, options: PaginateOptions) {
     const {
+      itemCount,
       params = {},
-      itemCount = 1000,
       mapFunc = (item: any) => item,
       auth
     } = options
